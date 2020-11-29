@@ -1,0 +1,38 @@
+---
+  
+- name: Install BlueSpiceExportTables
+  unarchive:
+    src: BlueSpiceExportTables-REL1_35-8207a64.tar.gz
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/"
+
+- name: Install BlueSpiceFoundation
+  unarchive:
+    src: BlueSpiceFoundation-REL1_35-0b6997c.tar.gz
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/"
+
+- name: Install BlueSpiceUEModuleTable2Excel
+  unarchive:
+    src: BlueSpiceUEModuleTable2Excel-REL1_35-2c47f7b.tar.gz
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/"
+
+- name: Install BlueSpiceUniversalExport
+  unarchive:
+    src: BlueSpiceUniversalExport-REL1_35-6118a79.tar.gz
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/"
+
+- name: Install ExtJSBase
+  unarchive:
+    src: ExtJSBase-REL1_35-e171243.tar.gz
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/"
+
+- name: Transfer Config
+  copy:
+    src: exporttables.php
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/"
+
+- name: Enable Export Tables
+  blockinfile:
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
+    marker: "## {mark} ANSIBLE EXPORTTABLES CONFIG"
+    block: |
+      include "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/exporttables.php";

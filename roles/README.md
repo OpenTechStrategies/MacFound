@@ -23,6 +23,14 @@ of the mediawiki instance, and then include that file in `LocalSettings.php`
   [Embed Video Extension](https://www.mediawiki.org/wiki/Extension:EmbedVideo).
   The tar is kept locally for availability, and there are some patches for
   accessibility.
+* [exporttables/](exporttables/) - Installation of the mediawiki side of the
+  [Export Tables Extension](https://www.mediawiki.org/wiki/Extension:ExportTables).
+  Also requires the installation of:
+  * [ExtJSBase](https://www.mediawiki.org/wiki/Extension:ExtJSBase)
+  * [BlueSpiceFoundation](https://www.mediawiki.org/wiki/Extension:BlueSpiceFoundation)
+  * [BlueSpiceUniversalExport](https://www.mediawiki.org/wiki/Extension:UniversalExport)
+  * [UEModuleTable2Excel](https://www.mediawiki.org/wiki/Extension:UEModuleTable2Excel)
+  These are all kept locally to ensure availability.
 * [finishmediawiki/](finishmediawiki/) - The final step that should be taken
   when deploying a site.  Updates the database and does any cleanup necessary.
 * [mediawiki/](mediawiki/) - The second step that should be taken to deploy

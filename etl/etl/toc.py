@@ -114,7 +114,7 @@ class WikiTableTocProposalFormatter(TocProposalFormatter):
         self.column_definitions = column_definitions
 
     def prefix(self, group_var_name):
-        template = '{| class="wikitable sortable" style="border-style: solid; border-color: gray; border-width: 5px;"\n'
+        template = '{| class="wikitable bs-exportable exportable sortable" style="border-style: solid; border-color: gray; border-width: 5px;"\n'
         for column_def in self.column_definitions:
             # This conditional is whether the viewer has permissions to this column, which
             # we ascertain by looking at the first proposal in the list
