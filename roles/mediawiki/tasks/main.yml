@@ -58,36 +58,36 @@
 
 - name: Download MediaWiki
   get_url:
-    url: https://releases.wikimedia.org/mediawiki/1.33/mediawiki-1.33.0.tar.gz
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0.tar.gz"
-    checksum: sha256:8335a2d8740c5dd5919a480b74c3d8e19f23a68b396df48c2d77646272fdcd67
+    url: https://releases.wikimedia.org/mediawiki/1.35/mediawiki-1.35.0.tar.gz
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0.tar.gz"
+    checksum: sha256:3a7fbc1dec03533b57c688b075f721bba70eb14d92a4a1eab8d7d5a5943f2ed4
 
 - name: Extract MediaWiki tarball
   unarchive:
-    src: "{{ mediawiki_install_directory }}/mediawiki-1.33.0.tar.gz"
+    src: "{{ mediawiki_install_directory }}/mediawiki-1.35.0.tar.gz"
     dest: "{{ mediawiki_install_directory }}/"
     remote_src: yes
-    creates: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/"
+    creates: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/"
 
 - name: Install MW with Composer
   command: composer install --no-dev
   args:
-    chdir: "{{ mediawiki_install_directory }}/mediawiki-1.33.0"
+    chdir: "{{ mediawiki_install_directory }}/mediawiki-1.35.0"
 
 - name: Create Wiki
-  command: "php {{ mediawiki_install_directory }}/mediawiki-1.33.0/maintenance/install.php --dbtype=mysql --dbserver=localhost --dbuser=\"{{ db_username }}\" --dbpass=\"{{ db_password }}\" --dbname={{ competition_name }}  --scriptpath=\"/{{ competition_name }}\" --lang=en --pass=\"{{ mediawiki_admin_password }}\" \"{{ competition_name }}\" \"admin\""
+  command: "php {{ mediawiki_install_directory }}/mediawiki-1.35.0/maintenance/install.php --dbtype=mysql --dbserver=localhost --dbuser=\"{{ db_username }}\" --dbpass=\"{{ db_password }}\" --dbname={{ competition_name }}  --scriptpath=\"/{{ competition_name }}\" --lang=en --pass=\"{{ mediawiki_admin_password }}\" \"{{ competition_name }}\" \"admin\""
   args:
-    creates: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    creates: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
 
 - name: Create competition configuration directory
   file:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/"
     state: directory
 
 - name: Transfer Configs
   copy:
     src: "{{ item }}"
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/"
   loop:
     - upload-config.php
     - lfc-analysis-rule.php
@@ -95,41 +95,41 @@
 
 - name: Enable Configs
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} CONFIGS"
     block: |
-      include "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/upload-config.php";
-      include "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/lfc-analysis-rule.php";
-      include "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/special-log.php";
+      include "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/upload-config.php";
+      include "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/lfc-analysis-rule.php";
+      include "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/special-log.php";
 
 - name: Remove Old Upload Config
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} UPLOAD CONFIG"
 
 - name: Remove Old LFC Analysis page rule
   blockinfile:
     marker: "## {mark} ANSIBLE LFC EVALUATOR CONFIG"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
 
 - name: Remove Old Special:Log name overrides
   blockinfile:
     marker: "## {mark} ANSIBLE SPECIAL LOG NAME OVERRIDES CONFIG"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
 
 - name: Remove Old Special:Log types that aren't of interest
   blockinfile:
     marker: "## {mark} ANSIBLE DISABLE SPECIAL LOG TYPES CONFIG"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
 
 - name: Remove Old Special:Log format slightly
   blockinfile:
     marker: "## {mark} ANSIBLE CHANGE SPECIAL LOG FORMAT CONFIG"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
 
 - name: Set TOC depth
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     line: $wgMaxTocLevel = 2;
 
 - name: Disable MediaWiki Cache
@@ -137,19 +137,29 @@
   # the following createAndPromote.php command fails due to cache timeout.
   # The reason isn't clear, but for now, this will fix it.
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
+    regex: "\\$wgMainCacheType.*"
     line: $wgMainCacheType = CACHE_NONE;
 
+- name: Setting wgServer
+  # When the cache is enabled, on AWS, with the default setting,
+  # the following createAndPromote.php command fails due to cache timeout.
+  # The reason isn't clear, but for now, this will fix it.
+  lineinfile:
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
+    regex: "\\$wgServer.*"
+    line: "$wgServer = '{{ mediawiki_server }}';"
+
 - name: Create mwlib user
-  command: "php {{ mediawiki_install_directory }}/mediawiki-1.33.0/maintenance/createAndPromote.php --force --dbuser=\"{{ db_username }}\" --dbpass=\"{{ db_password }}\" \"{{ mediawiki_mwlib_username }}\" \"{{ mediawiki_mwlib_password }}\""
+  command: "php {{ mediawiki_install_directory }}/mediawiki-1.35.0/maintenance/createAndPromote.php --force --dbuser=\"{{ db_username }}\" --dbpass=\"{{ db_password }}\" \"{{ mediawiki_mwlib_username }}\" \"{{ mediawiki_mwlib_password }}\""
 
 - name: Create csv2wiki user
-  command: "php {{ mediawiki_install_directory }}/mediawiki-1.33.0/maintenance/createAndPromote.php --bot --force --dbuser=\"{{ db_username }}\" --dbpass=\"{{ db_password }}\" \"{{ mediawiki_csv2wiki_username }}\" \"{{ mediawiki_csv2wiki_password }}\""
+  command: "php {{ mediawiki_install_directory }}/mediawiki-1.35.0/maintenance/createAndPromote.php --bot --force --dbuser=\"{{ db_username }}\" --dbpass=\"{{ db_password }}\" \"{{ mediawiki_csv2wiki_username }}\" \"{{ mediawiki_csv2wiki_password }}\""
 
 - name: Enable Common.css on Login Page
   blockinfile:
     marker: "## {mark} ANSIBLE ENABLE CSS ON LOGIN"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     block: |
       $wgAllowSiteCSSOnRestrictedPages = true;
 
@@ -159,7 +169,7 @@
     dest: "{{ mediawiki_install_directory }}/Common.css"
 
 - name: Install Common group css
-  raw: "php {{ mediawiki_install_directory }}/mediawiki-1.33.0/maintenance/edit.php -b MediaWiki:Common.css < {{ mediawiki_install_directory }}/Common.css"
+  raw: "php {{ mediawiki_install_directory }}/mediawiki-1.35.0/maintenance/edit.php -b MediaWiki:Common.css < {{ mediawiki_install_directory }}/Common.css"
 
 - name: Remove Common group css
   file:
@@ -169,7 +179,7 @@
 - name: Transfer htaccess
   copy:
     src: .htaccess
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/.htaccess"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/.htaccess"
 
 - name: Transfer wiki cheat sheet
   copy:
@@ -177,7 +187,7 @@
     dest: "{{ mediawiki_install_directory }}/Wiki_Markup_Cheat_Sheet"
 
 - name: Install wiki cheat sheet
-  raw: "php {{ mediawiki_install_directory }}/mediawiki-1.33.0/maintenance/edit.php -b Wiki_Markup_Cheat_Sheet < {{ mediawiki_install_directory }}/Wiki_Markup_Cheat_Sheet"
+  raw: "php {{ mediawiki_install_directory }}/mediawiki-1.35.0/maintenance/edit.php -b Wiki_Markup_Cheat_Sheet < {{ mediawiki_install_directory }}/Wiki_Markup_Cheat_Sheet"
 
 - name: Transfer wiki cheat sheet
   file:
@@ -189,7 +199,7 @@
   become_user: root
   file:
     state: link
-    src: "{{ mediawiki_install_directory }}/mediawiki-1.33.0"
+    src: "{{ mediawiki_install_directory }}/mediawiki-1.35.0"
     path: "{{ html_directory }}/{{ competition_name }}"
 
 - name: Set permissions on attachments directory

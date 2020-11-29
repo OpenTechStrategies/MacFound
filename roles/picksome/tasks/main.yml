@@ -3,17 +3,17 @@
 - name: Check out PickSome
   git:
     repo: https://github.com/OpenTechStrategies/PickSome
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/PickSome/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/PickSome/"
     version: 59df890
 
 - name: Transfer Config
   copy:
     src: picksome.php
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/"
 
 - name: Enable PickSome
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} ANSIBLE PICKSOME CONFIG"
     block: |
-      include "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/picksome.php";
+      include "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/picksome.php";

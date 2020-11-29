@@ -3,12 +3,12 @@
 - name: Check out TeamComments
   git:
     repo: https://github.com/OpenTechStrategies/TeamComments
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/TeamComments/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/TeamComments/"
     version: 450bff7
 
 - name: Enable TeamComments
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} ANSIBLE TEAMCOMMENTS CONFIG"
     block: |
       wfLoadExtension('TeamComments');

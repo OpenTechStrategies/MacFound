@@ -3,6 +3,7 @@ competition_name: 100Change2017Partners
 db_username: 100Change2017Partners_rw
 torquedataconnect_sheet_name: LFC100Change2017
 html_directory: /var/www/html
+mediawiki_server: https://torque.leverforchange.org
 mediawiki_install_directory: /home/deploy/100Change2017Partners/
 mediawiki_csv2wiki_username: csv2wiki
 deployment_user: deploy

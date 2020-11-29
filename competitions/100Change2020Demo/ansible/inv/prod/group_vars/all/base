@@ -2,6 +2,7 @@
 competition_name: 100Change2020Demo
 db_username: 100Change2020Demo_rw
 html_directory: /var/www/html
+mediawiki_server: https://torque.leverforchange.org
 mediawiki_install_directory: /home/deploy/100Change2020demo/
 mediawiki_csv2wiki_username: csv2wiki
 deployment_user: deploy

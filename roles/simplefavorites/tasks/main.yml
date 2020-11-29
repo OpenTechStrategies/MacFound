@@ -3,10 +3,10 @@
 - name: Check out SimpleFavorites
   git:
     repo: https://github.com/OpenTechStrategies/SimpleFavorites
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/SimpleFavorites/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/SimpleFavorites/"
     version: 59fed33
 
 - name: Enable SimpleFavorites
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     line: "wfLoadExtension('SimpleFavorites');"

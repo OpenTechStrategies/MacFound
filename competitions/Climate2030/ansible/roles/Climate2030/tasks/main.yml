@@ -18,10 +18,17 @@
 - name: Transfer Climate2030 Logo
   copy:
     src: Climate2030_Logo.png
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/resources/assets/Climate2030_Logo.png"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/resources/assets/Climate2030_Logo.png"
 
 - name: Install Climate2030 Logo
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     regexp: ^\$wgLogo = .*
     line: $wgLogo = "$wgResourceBasePath/resources/assets/Climate2030_Logo.png";
+
+- name: Override base pluggable auth config
+  blockinfile:
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
+    marker: "## {mark} ANSIBLE PLUGABLE AUTH OVERRIDE CONFIG"
+    block: |
+      $wgPluggableAuth_EnableLocalLogin = true;

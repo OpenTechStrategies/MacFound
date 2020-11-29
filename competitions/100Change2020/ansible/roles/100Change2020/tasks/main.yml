@@ -3,7 +3,7 @@
 - name: Clear pluggable auth override config
   blockinfile:
     marker: "## {mark} ANSIBLE PLUGABLE AUTH OVERRIDE CONFIG"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
 
 # Because the overrides MUST come after the originals (loaded from include statements)
 # in LocalSettings, we delete the overrides from the file, and then re-insert them to
@@ -11,11 +11,11 @@
 - name: Clear picksome override config
   blockinfile:
     marker: "## {mark} ANSIBLE PICKSOME OVERRIDE CONFIG"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
 
 - name: Override some PickSome Variables
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} ANSIBLE PICKSOME OVERRIDE CONFIG"
     block: |
       $wgPickSomeNumberOfPicks = 5;
@@ -24,11 +24,11 @@
 - name: Transfer LFC Logo
   copy:
     src: LeverForChange_Logo.png
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/resources/assets/LeverForChange_Logo.png"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/resources/assets/LeverForChange_Logo.png"
 
 - name: Install LFC Logo
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     regexp: ^\$wgLogo = .*
     line: $wgLogo = "$wgResourceBasePath/resources/assets/LeverForChange_Logo.png";
 

@@ -3,22 +3,22 @@
 - name: Transfer EO Logo
   copy:
     src: "{{ lookup('env','OTS_DIR') }}/clients/lever-for-change/torque-sites/EO2020/data/EOLogo.png"
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/resources/assets/EOLogo.png"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/resources/assets/EOLogo.png"
 
 - name: Transfer LFC Logo
   copy:
     src: LeverForChange_Logo.png
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/resources/assets/LeverForChange_Logo.png"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/resources/assets/LeverForChange_Logo.png"
 
 - name: Install LFC Logo
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     regexp: ^\$wgLogo = .*
     line: $wgLogo = "$wgResourceBasePath/resources/assets/LeverForChange_Logo.png";
 
 - name: Override base pluggable auth config
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} ANSIBLE PLUGABLE AUTH OVERRIDE CONFIG"
     block: |
       $wgPluggableAuth_EnableLocalLogin = true;

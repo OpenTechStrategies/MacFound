@@ -3,22 +3,22 @@
 - name: Check out ActivityLog
   git:
     repo: https://github.com/OpenTechStrategies/ActivityLog
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/ActivityLog/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/ActivityLog/"
     version: 27e9191
 
 - name: Install ActivityLog Configuration
   copy:
     src: ActivityLogConfiguration
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/"
 
 - name: Transfer Config
   copy:
     src: activity-log.php
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/"
 
 - name: Enable ActivityLog
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} ANSIBLE ACTIVITYLOG CONFIG"
     block: |
-      include "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/activity-log.php";
+      include "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/activity-log.php";

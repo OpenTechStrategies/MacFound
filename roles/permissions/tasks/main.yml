@@ -3,14 +3,14 @@
 - name: Transfer Config
   copy:
     src: default-permissions.php
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/"
 
 - name: Enable Permissions
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} ANSIBLE GROUP PERMISSIONS CONFIG"
     block: |
-      include "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/default-permissions.php";
+      include "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/default-permissions.php";
 
 - name: Transfer DecisionMakers group css
   copy:
@@ -18,7 +18,7 @@
     dest: "{{ mediawiki_install_directory }}/Group-DecisionMakers.css"
 
 - name: Install DecisionMakers group css
-  raw: "php {{ mediawiki_install_directory }}/mediawiki-1.33.0/maintenance/edit.php -b MediaWiki:Group-{{ item }}.css < {{ mediawiki_install_directory }}/Group-DecisionMakers.css"
+  raw: "php {{ mediawiki_install_directory }}/mediawiki-1.35.0/maintenance/edit.php -b MediaWiki:Group-{{ item }}.css < {{ mediawiki_install_directory }}/Group-DecisionMakers.css"
   loop:
     - PseudoDecisionMakers
     - DecisionMakers
@@ -34,4 +34,4 @@
 - name: Remove Old Disable Special:Log for groups that don't have view-special-log config
   blockinfile:
     marker: "## {mark} ANSIBLE SPECIAL LOG PERMISSIONS CONFIG"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"

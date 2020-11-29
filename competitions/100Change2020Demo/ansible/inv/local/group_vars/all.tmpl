@@ -23,6 +23,11 @@ mysql_root_password: ${MYSQL_ROOT_PASSWORD}
 db_username: ${DB_USERNAME}
 db_password: ${DB_PASSWORD}
 
+# Sets the wgServer variable for mediawiki.  This needs to be set
+# for installations of mediawiki greater than 1.35.0, for security
+# reasons.  See https://phabricator.wikimedia.org/T30798
+mediawiki_sever: http://localhost
+
 # Directory to install all of the mediawiki needs
 # This must be an absolute path because of weirdness with unarchive
 mediawiki_install_directory: ${MEDIAWIKI_INSTALL_DIRECTORY}

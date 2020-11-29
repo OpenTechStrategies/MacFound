@@ -7,16 +7,16 @@
 
 - name: Download MediaWiki
   get_url:
-    url: https://releases.wikimedia.org/mediawiki/1.33/mediawiki-1.33.0.tar.gz
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0.tar.gz"
+    url: https://releases.wikimedia.org/mediawiki/1.35/mediawiki-1.35.0.tar.gz
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0.tar.gz"
     checksum: sha256:8335a2d8740c5dd5919a480b74c3d8e19f23a68b396df48c2d77646272fdcd67
 
 - name: Extract MediaWiki tarball
   unarchive:
-    src: "{{ mediawiki_install_directory }}/mediawiki-1.33.0.tar.gz"
+    src: "{{ mediawiki_install_directory }}/mediawiki-1.35.0.tar.gz"
     dest: "{{ mediawiki_install_directory }}/"
     remote_src: yes
-    creates: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/"
+    creates: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/"
 
 - name: Enable PHP modules
   become_user: root
@@ -46,17 +46,17 @@
 - name: Link TorqueDataConnect
   file:
     src: "{{ mediawiki_install_directory }}/torque/TorqueDataConnect/"
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/TorqueDataConnect"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/TorqueDataConnect"
     state: link
 
 - name: Create Wiki
-  command: "php {{ mediawiki_install_directory }}/mediawiki-1.33.0/maintenance/install.php --dbtype=mysql --dbserver=localhost --dbuser=\"{{ db_username }}\" --dbpass=\"{{ db_password }}\" --dbname=100Change2020Demo --scriptpath=\"/100Change2020Demo\" --lang=en --pass=\"{{ mediawiki_admin_password }}\" \"100Change2020Demo\" \"admin\""
+  command: "php {{ mediawiki_install_directory }}/mediawiki-1.35.0/maintenance/install.php --dbtype=mysql --dbserver=localhost --dbuser=\"{{ db_username }}\" --dbpass=\"{{ db_password }}\" --dbname=100Change2020Demo --scriptpath=\"/100Change2020Demo\" --lang=en --pass=\"{{ mediawiki_admin_password }}\" \"100Change2020Demo\" \"admin\""
   args:
-    creates: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    creates: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
 
 - name: Enable TorqueDataConnect
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} ANSIBLE TORQUEDATACONNECT CONFIG"
     block: |
       define("TORQUE_CONFIG", 4000);
@@ -75,16 +75,16 @@
   # the following createAndPromote.php command fails due to cache timeout.
   # The reason isn't clear, but for now, this will fix it.
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     line: $wgMainCacheType = CACHE_NONE;
 
 - name: Create csv2wiki user
-  command: "php {{ mediawiki_install_directory }}/mediawiki-1.33.0/maintenance/createAndPromote.php --bot --force --dbuser=\"{{ db_username }}\" --dbpass=\"{{ db_password }}\" \"{{ mediawiki_csv2wiki_username }}\" \"{{ mediawiki_csv2wiki_password }}\""
+  command: "php {{ mediawiki_install_directory }}/mediawiki-1.35.0/maintenance/createAndPromote.php --bot --force --dbuser=\"{{ db_username }}\" --dbpass=\"{{ db_password }}\" \"{{ mediawiki_csv2wiki_username }}\" \"{{ mediawiki_csv2wiki_password }}\""
 
 - name: Set Group Permissions
   blockinfile:
     marker: "## {mark} ANSIBLE GROUP PERMISSIONS CONFIG"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     block: |
       $wgGroupPermissions['*']['read'] = false;
       $wgRestrictionLevels[] = 'generated';
@@ -100,18 +100,18 @@
 - name: Transfer LFC Logo
   copy:
     src: LeverForChange_Logo.png
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/resources/assets/LeverForChange_Logo.png"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/resources/assets/LeverForChange_Logo.png"
 
 - name: Install LFC Logo
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     regexp: ^\$wgLogo = .*
     line: $wgLogo = "$wgResourceBasePath/resources/assets/LeverForChange_Logo.png";
 
 - name: Install Demo.php
   copy:
     src: "{{ item }}"
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/"
   loop:
     - demo.php
     - "{{ lookup('env','OTS_DIR') }}/clients/lever-for-change/torque-sites/100Change2020Demo/data/demo_header.php"
@@ -120,25 +120,25 @@
 - name: Install Demo Files
   unarchive:
     src: "{{ lookup('env','OTS_DIR') }}/clients/lever-for-change/torque-sites/100Change2020Demo/data/demo_files.tar.gz"
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/"
-    creates: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/demo_files/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/"
+    creates: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/demo_files/"
 
 - name: Enable Demo
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     line: include "demo.php";
 
 # This should come near the end to make sure that all the database updates
 # for the extensions get run after the rest of the system is set up.
 - name: Run mediawiki updates
-  command: "php {{ mediawiki_install_directory }}/mediawiki-1.33.0/maintenance/update.php"
+  command: "php {{ mediawiki_install_directory }}/mediawiki-1.35.0/maintenance/update.php"
 
 # Handle Apache changes
 - name: Symlink to webserver directory
   become_user: root
   file:
     state: link
-    src: "{{ mediawiki_install_directory }}/mediawiki-1.33.0"
+    src: "{{ mediawiki_install_directory }}/mediawiki-1.35.0"
     path: "{{ html_directory }}/100Change2020Demo"
 
 - name: Restart Apache

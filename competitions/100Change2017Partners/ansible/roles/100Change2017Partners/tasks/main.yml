@@ -3,10 +3,10 @@
 - name: Transfer LFC Logo
   copy:
     src: 100Change-logo150.png
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/resources/assets/100Change-logo150.png"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/resources/assets/100Change-logo150.png"
 
 - name: Install LFC Logo
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     regexp: ^\$wgLogo = .*
     line: $wgLogo = "$wgResourceBasePath/resources/assets/100Change-logo150.png";

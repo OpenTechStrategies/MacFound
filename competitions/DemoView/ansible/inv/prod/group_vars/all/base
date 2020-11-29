@@ -3,6 +3,7 @@ competition_name: DemoView
 db_username: DemoView_rw
 torquedataconnect_sheet_name: DemoView
 html_directory: /var/www/html
+mediawiki_server: https://torque.leverforchange.org
 mediawiki_install_directory: /home/deploy/DemoView/
 mediawiki_mwlib_username: mwlib
 mediawiki_csv2wiki_username: csv2wiki

@@ -6,29 +6,29 @@
 - name: Clear Permissions Override
   blockinfile:
     marker: "## {mark} ANSIBLE GROUP PERMISSIONS OVERRIDE CONFIG"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
 
 - name: Add Permissions Override
   blockinfile:
     marker: "## {mark} ANSIBLE GROUP PERMISSIONS OVERRIDE CONFIG"
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     block: |
       $wgGroupPermissions['DecisionMakers']['teamcomment'] = false;
 
 - name: Transfer LoneStar Logo
   copy:
     src: LoneStar_Logo.png
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/resources/assets/LoneStar_Logo.png"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/resources/assets/LoneStar_Logo.png"
 
 - name: Install LoneStar Logo
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     regexp: ^\$wgLogo = .*
     line: $wgLogo = "$wgResourceBasePath/resources/assets/LoneStar_Logo.png";
 
 - name: Override base pluggable auth config
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} ANSIBLE PLUGABLE AUTH OVERRIDE CONFIG"
     block: |
       $wgPluggableAuth_EnableLocalLogin = true;

@@ -9,17 +9,17 @@
 - name: Link TorqueDataConnect
   file:
     src: "{{ mediawiki_install_directory }}/torque/TorqueDataConnect/"
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/TorqueDataConnect"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/TorqueDataConnect"
     state: link
 
 - name: Transfer Config
   template:
     src: torquedataconnect.php.j2
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/torquedataconnect.php"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/torquedataconnect.php"
 
 - name: Enable TorqueDataConnect
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     marker: "## {mark} ANSIBLE TORQUEDATACONNECT CONFIG"
     block: |
-      include "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/torquedataconnect.php";
+      include "{{ mediawiki_install_directory }}/mediawiki-1.35.0/torque-sites-config/torquedataconnect.php";

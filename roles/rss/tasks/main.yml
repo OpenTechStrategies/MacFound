@@ -3,11 +3,11 @@
 - name: Install RSS
   unarchive:
     src: RSS-REL1_34-0e63926.tar.gz
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/"
 
 - name: Enable RSS
   blockinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     block: |
       wfLoadExtension('RSS');
       $wgRSSUrlWhitelist = ["*"];

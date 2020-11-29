@@ -3,7 +3,7 @@
 # This should come near the end to make sure that all the database updates
 # for the extensions get run after the rest of the system is set up.
 - name: Run mediawiki updates
-  command: "php {{ mediawiki_install_directory }}/mediawiki-1.33.0/maintenance/update.php"
+  command: "php {{ mediawiki_install_directory }}/mediawiki-1.35.0/maintenance/update.php"
 
 - name: Restart Apache
   become_user: root

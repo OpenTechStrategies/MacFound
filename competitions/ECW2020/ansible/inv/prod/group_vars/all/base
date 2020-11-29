@@ -4,6 +4,7 @@ db_username: ECW2020_rw
 torquedataconnect_sheet_name: ECW2020
 
 html_directory: /var/www/html
+mediawiki_server: https://torque.leverforchange.org
 mediawiki_install_directory: /home/deploy/ECW2020/
 mediawiki_mwlib_username: mwlib
 mediawiki_csv2wiki_username: csv2wiki

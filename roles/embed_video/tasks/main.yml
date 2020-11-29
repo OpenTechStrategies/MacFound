@@ -3,14 +3,14 @@
 - name: Install EmbedVideo
   unarchive:
     src: EmbedVideo-v2.8.0.zip
-    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/"
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/"
 
 - name: Patch EmbedVideo
   patch:
     src: EmbedVideoIframeTitle.patch
-    basedir: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/EmbedVideo-v2.8.0/"
+    basedir: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/extensions/EmbedVideo-v2.8.0/"
 
 - name: Enable EmbedVideo
   lineinfile:
-    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.35.0/LocalSettings.php"
     line: "wfLoadExtension('EmbedVideo-v2.8.0');"
