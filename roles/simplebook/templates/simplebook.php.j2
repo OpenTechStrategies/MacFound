@@ -1,0 +1,41 @@
+<?php
+require_once "$IP/extensions/SimpleBook/SimpleBook.php";
+
+if(isset($wgPickSomeLoaded)) {
+  echo "PickSome Loaded before SimpleBook, so bombing out";
+  throw new RunTimeException("SimpleBook being loaded after PickSome");
+}
+if(isset($wgCollectionMaxArticles)) {
+  echo "Collection is loaded, so bombing out";
+  throw new RunTimeException("SimpleBook and Collection cannot both be installed on the same wiki");
+}
+$wgSimpleBookRenderingApiUrl = 'http://127.0.0.1:3333';
+$wgCollectionMaxArticles = 250;
+$wgEnableApi = true;
+$wgCollectionFormats = array( 'rl' => 'PDF',);
+$wgCollectionPortletFormats = [];
+$wgCollectionDisableDownloadSection = false;
+$wgHooks['BeforeInitialize'][] = function(&$title, &$article = null, &$output, &$user, $request, $mediaWiki) {
+  global $wgSimpleBookPassthroughParameters,
+    $wgSimpleBookRenderingCredentials,
+    $wgTorqueDataConnectGroup,
+    $wgTorqueDataConnectRenderToHTML,
+    $wgTorqueDataConnectView;
+  $group = TorqueDataConnectConfig::getValidGroup($user);
+  $view = TorqueDataConnectConfig::getCurrentView();
+  $wgSimpleBookPassthroughParameters = [
+    'torqueGroup' => $group,
+    'torqueView' => $view,
+  ];
+  $wgSimpleBookRenderingCredentials = [
+    'username' => '{{ mediawiki_mwlib_username }}',
+    'password' => '{{ mediawiki_mwlib_password }}',
+  ];
+
+  if($user && strtolower($user->getName()) == "{{ mediawiki_mwlib_username }}") {
+    $wgTorqueDataConnectRenderToHTML = false;
+    $wgTorqueDataConnectGroup = $request->getText('torqueGroup', false);
+    $wgTorqueDataConnectView = $request->getText('torqueView', false);
+  }
+};
+?>

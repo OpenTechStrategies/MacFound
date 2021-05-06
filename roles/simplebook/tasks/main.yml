@@ -1,0 +1,26 @@
+---
+
+- name: Check out SimpleBook
+  git:
+    repo: https://github.com/OpenTechStrategies/SimpleBook
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/SimpleBook"
+    version: "{{ simplebook_git_version }}"
+
+- name: Transfer Config
+  template:
+    src: simplebook.php.j2
+    dest: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/simplebook.php"
+
+- name: Enable SimpleBook
+  blockinfile:
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/LocalSettings.php"
+    marker: "## {mark} ANSIBLE SIMPLEBOOK CONFIG"
+    block: |
+      include "{{ mediawiki_install_directory }}/mediawiki-1.33.0/torque-sites-config/simplebook.php";
+
+- name: Remove Simplebook Book Text
+  replace:
+    path: "{{ mediawiki_install_directory }}/mediawiki-1.33.0/extensions/SimpleBook/i18n/en.json"
+    regexp: '\t"coll-book_creator_intro": "<big>With the ''''book creator'''' you can create a book containing wiki pages of your choice. You can export the book in different formats \(for example PDF or ODF\) or order a printed copy.</big>",'
+    replace: '\t"coll-book_creator_intro": "<big>With the ''''book creator'''' you can create a book containing wiki pages of your choice. You can export the book in different formats (for example PDF or ODF).</big>",'
+
