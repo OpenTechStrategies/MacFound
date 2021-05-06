@@ -1,0 +1,52 @@
+---
+- name: Install apt prerequisites
+  become_user: root
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - pipenv
+    - supervisor
+
+- name: install NodeJS
+  shell: |
+    curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs
+
+- name: Install yarn
+  become_user: root
+  npm:
+    name: yarn
+    global: yes
+
+- name: Setup installation directory
+  file:
+    path: "{{ simplebook_install_directory }}"
+    state: directory
+
+- name: Check out SimpleBook
+  git:
+    repo: https://github.com/OpenTechStrategies/SimpleBook
+    dest: "{{ simplebook_install_directory }}"
+    version: "{{ simplebook_git_version }}"
+
+- name: Run pipenv install
+  command: "pipenv install"
+  args:
+    chdir: "{{ simplebook_install_directory }}/services/api"
+
+- name: Run yarn install
+  command: "yarn install"
+  args:
+    chdir: "{{ simplebook_install_directory }}/services/api/mw2pdf"
+
+- name: Install SimpleBook supervisor
+  become_user: root
+  template:
+    src: supervisor-simplebook.conf.j2
+    dest: /etc/supervisor/conf.d/simplebook.conf
+
+- name: Restart supervisor for SimpleBook
+  become_user: root
+  supervisorctl:
+    name: "simplebook"
+    state: restarted
