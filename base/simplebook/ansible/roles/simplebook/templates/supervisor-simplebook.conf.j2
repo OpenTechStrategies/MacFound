@@ -1,0 +1,24 @@
+[program:simplebookserver]
+directory={{ simplebook_install_directory }}/services/api
+user:vagrant
+command=pipenv run gunicorn --reload --bind 0.0.0.0:3333 wsgi:app
+autostart=true
+autorestart=false
+stdout_logfile=/var/log/simplebook.output.log
+autorestart=true
+redirect_stderr=true
+redirect_stdout=true
+
+[program:simplebookworker]
+directory={{ simplebook_install_directory }}/services/api
+user:vagrant
+command=pipenv run rq worker
+autostart=true
+autorestart=false
+stdout_logfile=/var/log/simplebookworker.output.log
+autorestart=true
+redirect_stderr=true
+redirect_stdout=true
+
+[group:simplebook]
+programs=simplebookserver,simplebookworker
